@@ -1,17 +1,9 @@
 import { Layout } from "../components/Layout" 
 import Post from "../components/Post"
 import { getAllPostsData } from "../lib/posts"
+import { BlogProps } from "../types/post"
 
-type BlogProps = {
-  posts: {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-  }[]
-}
-
-const Blog = ({ posts }: BlogProps) => {
+export default function Blog({ posts }: BlogProps) {
   return (
     <Layout title="Blog">
       <ul>
@@ -20,8 +12,6 @@ const Blog = ({ posts }: BlogProps) => {
     </Layout>
   )
 }
-
-export default Blog
 
 export async function getStaticProps() {
   const posts = await getAllPostsData();

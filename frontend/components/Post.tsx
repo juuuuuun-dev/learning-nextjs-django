@@ -1,7 +1,7 @@
 import { PostProps } from "../types/post";
 import Link from "next/link";
 
-const Post = ({post} :PostProps) => {
+export default function Post({post} :PostProps) {
   return (
     <div>
       <span>{post.id}</span>
@@ -15,5 +15,3 @@ const Post = ({post} :PostProps) => {
     </div>
   )
 }
-
-export default Post;
