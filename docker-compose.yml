@@ -1,0 +1,54 @@
+version: "3.3"
+
+services:
+  nginx:
+    build:
+      context: ./Docker/nginx
+    container_name: ${APP_PREFIX}.nginx
+    volumes:
+      - ./backend/static:/app/static
+    ports:
+      - "${NGINX_PORT}:${NGINX_PORT}"
+    environment:
+      - NGINX_PORT=${NGINX_PORT}
+      - DJANGO_PORT=${DJANGO_PORT}
+      - UPSTREAM_HOST=web
+    depends_on:
+      - web
+  db:
+    image: mysql:5.7
+    container_name: ${APP_PREFIX}.mysql
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      TZ: ${TIME_ZONE}
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ${DB_VOLUME_PATH}:/var/lib/mysql
+      - ./Docker/sql:/docker-entrypoint-initdb.d
+  web:
+    build:
+      context: ./Docker/python
+    container_name: ${APP_PREFIX}.web
+    environment:
+      - AUTO_RELOAD=1
+      - ENV_NAME=${ENV_NAME}
+      - DEBUG=${DEBUG}
+      - SECRET_KEY=${SECRET_KEY}
+      - NGINX_PORT=${NGINX_PORT}
+      - DJANGO_PORT=${DJANGO_PORT}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=${DB_PORT}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - TIME_ZONE=${TIME_ZONE}
+      - LANGUAGE_CODE=${LANGUAGE_CODE}
+    volumes:
+      - ./backend/:/app
+    expose:
+      - "${DJANGO_PORT}"
+    depends_on:
+      - db
