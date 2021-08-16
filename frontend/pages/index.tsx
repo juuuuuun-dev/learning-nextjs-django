@@ -1,9 +1,10 @@
 import { Layout } from "../components/Layout" 
+import Auth from "../components/Auth"
 
 export default function Home() {
   return (
-    <Layout title="Home">
-        <h1>Hello Nextjs</h1>
+    <Layout title="Login">
+        <Auth />
     </Layout>
   )
 }

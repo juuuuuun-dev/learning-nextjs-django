@@ -6,7 +6,7 @@ export default function Post({post} :PostProps) {
     <div>
       <span>{post.id}</span>
       {" : "}
-      <Link href={`posts/${post.id}`}>
+      <Link href={`/posts/${post.slug}`} passHref>
         <a className="cursor-point text-blue-500 border-b border-blue-500 hover:bg-gray-200">
           {post.title}
         </a>

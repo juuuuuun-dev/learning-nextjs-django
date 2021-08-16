@@ -1,7 +1,8 @@
 import fetch from "node-fetch";
-import { PostType } from "../types/post";
+import { PostDetail, PostType } from "../types/post";
 
-const apiUrl = "https://jsonplaceholder.typicode.com/posts";
+// const apiUrl = "https://jsonplaceholder.typicode.com/posts";
+const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}posts/`
 
 export async function getAllPostsData() {
   const res = await fetch(new URL(apiUrl));
@@ -11,19 +12,20 @@ export async function getAllPostsData() {
 
 export async function getAllPostIds() {
   const res = await fetch(new URL(apiUrl));
-  const posts = await res.json();
-  return posts.map((post:PostType) => {
+  const data = await res.json();
+  return data.results.map((post:PostDetail) => {
     return {
       params: {
-        id: String(post.id)
+        slug: String(post.slug)
       }
     }
   })
 }
 
 
-export async function getPostData(id:string) {
-  const res = await fetch(new URL(`${apiUrl}/${id}`));
+export async function getPostData(slug:string) {
+
+  const res = await fetch(new URL(`${apiUrl}detail/${slug}`));
   const post = await res.json();
   return {
     post,
